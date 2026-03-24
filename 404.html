@@ -173,6 +173,273 @@
 
     </div>
     <!-- end of page-wrapper -->
+     
+<div class="modal fade" id="createPostModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-4">
+
+      <div class="modal-header border-0 pb-0">
+        <div>
+          <h4 class="fw-bold mb-0">
+            <i class="bi bi-lightbulb-fill text-warning me-2"></i>
+            Create STEM Project
+          </h4>
+          <small class="text-muted">Design and publish your innovation</small>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body pt-3">
+        <form id="createPostForm">
+
+          <!-- BASIC INFO -->
+          <div class="card border-0 shadow-sm rounded-4 mb-4 p-4">
+            <h6 class="fw-bold mb-3">
+              <i class="bi bi-info-circle me-2 text-primary"></i>
+              Basic Information
+            </h6>
+
+            <div class="row g-3">
+
+              <div class="col-md-6">
+                <label class="form-label">Project Title</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-type"></i></span>
+                  <input type="text" placeholder="Enter project title" class="form-control" id="postTitle" required>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">Author</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-person"></i></span>
+                  <input type="text" placeholder="Enter author name" class="form-control" id="postAuthor" required>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">School</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-building"></i></span>
+                  <select class="form-select" id="postSchool" required>
+                    <option value="">Select Unit School</option>
+                    <option>SDH Daan Mogot</option>
+                    <option>SDH Lippo Village</option>
+                    <option>SDH Manado</option>
+                    <option>SDH Sentul</option>
+                    <option>SDH Cikarang</option>
+                  </select>
+                </div>
+              </div>
+<div class="col-md-4">
+                <label class="form-label">School Year</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                  <select class="form-select" id="postSchoolYear" required>
+                    <option value="">Select School Year</option>
+                    <option>2025-2026</option>
+                    <option>2026-2027</option>
+                    <option>2027-2028</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Project Category</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="	fas fa-atom"></i></span>
+                  <select class="form-select" id="postCategory" required>
+                    <option value="">Select Category</option>
+                    <option>Science & Health</option>
+                    <option>Environment & Sustainability</option>
+                    <option>Technology & Engineering</option>
+                    <option>Business & Innovation</option>
+                    <option>Social Impact</option>
+                    <option>Art & Media</option>
+                  </select>
+                </div>
+              </div>
+               
+<div class="col-md-4">
+  <label class="form-label">Tags</label>
+  <div class="input-group">
+    
+
+    <select class="form-select" id="postTags" multiple>
+      <option value="Education">Education</option>
+      <option value="Design">Design</option>
+      <option value="Technology">Technology</option>
+      <option value="Media">Media</option>
+      <option value="Informatics">Informatics</option>
+      <option value="Video">Video</option>
+      <option value="STEM">STEM</option>
+    </select>
+
+  </div>
+</div>
+                  <div class="col-md-5">
+                <label class="form-label">School Level</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="	fas fa-graduation-cap"></i></span>
+                  <select class="form-select" id="postSchoolLevel" required>
+                    <option value="">Select School Level</option>
+                    <option>Junior School</option>
+                    <option>Senior School</option>
+                  </select>
+                </div>
+              </div>
+                       <div class="col-md-7">
+                <label class="form-label">School Grade</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="fas fa-book-reader"></i></span>
+                  <select class="form-select" id="postSchoolGrade" required>
+                    <option value="">Select School Grade</option>
+                  </select>
+                </div>
+              </div>
+           <div class="col-12">
+  <label class="form-label fw-semibold">
+   </i>
+    Project Description
+  </label>
+
+  <div class="border rounded-3 p-2 bg-white">
+    <div id="editor" style="height:220px;"></div>
+    <div id="counter">0 words</div>
+  </div>
+</div>
+          </div>
+
+          <!-- MEDIA -->
+          <div class="card border-0 shadow-sm rounded-4 mb-4 p-4">
+            <h6 class="fw-bold mb-3">
+              <i class="bi bi-images me-2 text-success"></i>
+              Media & Resources
+            </h6>
+
+            <div class="row g-3">
+<div class="col-md-6">
+
+<label class="form-label">Header Image</label>
+
+<div class="upload-box" id="uploadBox">
+
+  <i class="bi bi-cloud-arrow-up fs-3"></i>
+  <p class="mb-1">Drag & Drop Image</p>
+  <small class="text-muted">or click to upload</small>
+
+  <p id="fileHeaderName" class="mt-2 text-primary fw-semibold d-none"></p>
+  <input 
+    type="file"
+    id="postImageHeader"
+    accept="image/*"
+    hidden>
+
+</div>
+
+
+<button 
+type="button"
+id="removeHeader"
+class="btn btn-sm btn-danger mt-2 d-none">
+Remove Image
+</button>
+</div>
+
+ <div class="col-md-6">
+
+<label class="form-label">Author Image</label>
+
+<div class="upload-box" id="uploadAuthorBox">
+
+  <i class="bi bi-person-circle fs-3"></i>
+  <p class="mb-1">Drag & Drop Author Image</p>
+  <small class="text-muted">or click to upload</small>
+  <p id="fileAuthorName" class="mt-2 text-primary fw-semibold d-none"></p>
+  <input 
+    type="file"
+    id="postAuthorImage"
+    accept="image/*"
+    hidden>
+
+</div>
+
+<button 
+type="button"
+id="removeAuthor"
+class="btn btn-sm btn-danger mt-2 d-none">
+Remove Image
+</button>
+</div>
+
+              <div class="col-md-6">
+                <label class="form-label">YouTube Link</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-youtube"></i></span>
+                  <input type="text" class="form-control" id="postVideo">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Moodle Link</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-journal-bookmark"></i></span>
+                  <input type="text" class="form-control" id="postMoodle">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Research Poster PDF</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-file-earmark-pdf"></i></span>
+                  <input type="file" class="form-control" id="postResearch" accept="application/pdf">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label">Additional Image</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-plus-square"></i></span>
+                  <input type="text" class="form-control" id="postImage1">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="text-end">
+            <button type="submit" class="btn btn-primary px-4 py-2  shadow-sm">
+              <i class="bi bi-send-fill me-2"></i>
+              Publish Project
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="toast-container position-fixed top-0 end-0 p-4">
+  <div id="liveToast" class="custom-toast">
+
+    <!-- Particle Layer -->
+    <div class="toast-particles" id="toastParticles"></div>
+
+    <div class="toast-icon" id="toastIcon">
+      <i class="bi bi-check-circle-fill"></i>
+    </div>
+
+    <div class="toast-content">
+      <div class="toast-title" id="toastTitle">Success</div>
+      <div class="toast-message" id="toastMessage">Project published successfully! Redirecting...</div>
+    </div>
+
+    <div class="toast-progress">
+      <div class="toast-progress-bar" id="toastProgress"></div>
+    </div>
+
+  </div>
+</div>
   <!-- All JavaScript files
     ================================================== -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
