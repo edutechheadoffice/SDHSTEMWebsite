@@ -136,21 +136,39 @@ document.getElementById("sharePinterest").href =
 
 
   // Render tags
-const tagContainer = document.querySelector(".tag-share .tag ul");
-tagContainer.innerHTML = "";
 
-if (data.tags && Array.isArray(data.tags)) {
-  data.tags.forEach(tag => {
-    const li = document.createElement("li");
-    const a = document.createElement("a");
+  const tagContainer = document.querySelector(".tag-share .tag ul");
 
-    a.href = "#";
-    a.textContent = tag; // lebih aman daripada innerHTML
+  if (!tagContainer) {
+    console.error("Tag container not found");
+    return;
+  }
 
-    li.appendChild(a);
-    tagContainer.appendChild(li);
-  });
-}
+  let tags = data.tags;
+
+  if (typeof tags === "string") {
+    try {
+      tags = JSON.parse(tags);
+    } catch (e) {
+      console.error("Invalid JSON tags");
+      return;
+    }
+  }
+
+  if (Array.isArray(tags)) {
+    tagContainer.innerHTML = "";
+
+    tags.forEach(tag => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+
+      a.href = "#";
+      a.textContent = tag;
+
+      li.appendChild(a);
+      tagContainer.appendChild(li);
+    });
+  };
 }
 
 async function loadrelatedpost() {
@@ -204,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadPrevNext(currentId) {
 
-  //  PREVIOUS (id lebih kecil, paling dekat)
+  //  PREVIOUS 
   const { data: prev } = await supabaseClient
     .from("stem_projects")
     .select("id, title")
@@ -213,7 +231,7 @@ async function loadPrevNext(currentId) {
     .limit(1)
     .maybeSingle();
 
-  //  NEXT (id lebih besar, paling dekat)
+  //  NEXT
   const { data: next } = await supabaseClient
     .from("stem_projects")
     .select("id, title")
