@@ -118,11 +118,21 @@ const pageUrl = window.location.href;
 const pageTitle = encodeURIComponent(data.title);
 const pageImage = encodeURIComponent(data.image_header);
 
-// Facebook
+// Researchposter
+document.getElementById("PDFLink").href = data.research_pdf;
+// WatchVideo
+document.getElementById("YTVideo").href = data.youtube_link;
+//Moodle
+document.getElementById("MoodleCourse").href = data.moodle_link;
+
+// EnrolmentKey
+document.getElementById("EnrolmentKey").innerHTML = `<strong> Moodle Key:</strong> ${data.moodle_key}`;
+
+// Facebooklink
 document.getElementById("shareFacebook").href =
   `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
 
-// Twitter (X)
+// Twitterlink
 document.getElementById("shareTwitter").href =
   `https://twitter.com/intent/tweet?url=${pageUrl}&text=${pageTitle}`;
 
@@ -130,7 +140,7 @@ document.getElementById("shareTwitter").href =
 document.getElementById("shareLinkedin").href =
   `https://www.linkedin.com/sharing/share-offsite/?url=${pageUrl}`;
 
-// Pinterest
+// Pinterestlink
 document.getElementById("sharePinterest").href =
   `https://pinterest.com/pin/create/button/?url=${pageUrl}&media=${pageImage}&description=${pageTitle}`;
 
@@ -222,7 +232,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadPrevNext(currentId) {
 
-  //  PREVIOUS 
+  //prevpost
   const { data: prev } = await supabaseClient
     .from("stem_projects")
     .select("id, title")
@@ -231,7 +241,7 @@ async function loadPrevNext(currentId) {
     .limit(1)
     .maybeSingle();
 
-  //  NEXT
+  //nextpost
   const { data: next } = await supabaseClient
     .from("stem_projects")
     .select("id, title")
@@ -279,3 +289,254 @@ function renderPrevNext(prev, next) {
 
 loadProject();
 loadPrevNext(id);
+//tags
+async function getTags() {
+  const { data, error } = await supabaseClient
+    .from("stem_projects")
+    .select("tags");
+
+  if (error) {
+    console.error("Supabase error:", error);
+    return [];
+  }
+
+  return data;
+}
+
+function extractUniqueTags(rows) {
+  let allTags = [];
+
+  rows.forEach(row => {
+    let tags = row.tags;
+
+    if (!tags) return;
+
+    if (typeof tags === "string" && tags.startsWith("[")) {
+      try {
+        tags = JSON.parse(tags);
+      } catch {
+        return;
+      }
+    }
+
+    if (typeof tags === "string") {
+      tags = tags.split(",").map(t => t.trim());
+    }
+
+    if (Array.isArray(tags)) {
+      allTags = allTags.concat(tags);
+    }
+  });
+
+  return [...new Set(allTags)];
+}
+
+async function renderTags() {
+  const rows = await getTags();
+  const tags = extractUniqueTags(rows);
+
+  const container = document.querySelector("#tag-list");
+
+  if (!container) {
+    console.error("Tag container not found");
+    return;
+  }
+
+  container.innerHTML = "";
+
+  tags.forEach(tag => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+
+    a.href = "#";
+    a.textContent = tag;
+
+    li.appendChild(a);
+    container.appendChild(li);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", renderTags);
+
+const input = document.getElementById("search-input");
+const results = document.getElementById("search-results");
+
+let debounceTimer;
+
+// input listener
+input.addEventListener("input", function () {
+  clearTimeout(debounceTimer);
+
+  const keyword = this.value.trim();
+
+  debounceTimer = setTimeout(() => {
+    searchPosts(keyword);
+  }, 300);
+});
+
+// query ke Supabase
+async function searchPosts(keyword) {
+  if (!keyword) {
+    results.style.display = "none";
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("stem_projects")
+    .select("id,title, description, image_header")
+    .ilike("title", `%${keyword}%`)
+    .limit(5);
+
+  if (error) {
+    console.error("Search error:", error);
+    return;
+  }
+
+  renderResults(data);
+}
+
+//dropdown search
+function renderResults(items) {
+  results.innerHTML = "";
+
+  if (!items || items.length === 0) {
+    results.innerHTML = `<div class="search-item">No results</div>`;
+    results.style.display = "block";
+    return;
+  }
+
+  items.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "search-item";
+
+    div.innerHTML = `
+      <img src="${item.image_header || 'https://via.placeholder.com/60'}" class="search-thumb">
+      <div class="search-content">
+        <div class="search-title">${item.title}</div>
+        <div class="search-desc">${(item.description || '').slice(0, 60)}...</div>
+      </div>
+    `;
+
+    div.onclick = () => {
+      window.location.href = `project.html?id=${item.id}`;
+    };
+
+    results.appendChild(div);
+  });
+
+  results.style.display = "block";
+}
+
+// close search
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".search-widget")) {
+    results.style.display = "none";
+  }
+});
+
+//Thumbnail
+function extractYouTubeID(url) {
+    const regExp =
+        /(?:youtube\.com\/.*[?&]v=|youtu\.be\/|youtube\.com\/shorts\/)([^&\n?#]+)/;
+    const match = url.match(regExp);
+    return match ? match[1] : null;
+}
+
+async function renderVideo() {
+    const videoLink = document.getElementById("YTVideo");
+    const thumbnailDiv = document.getElementById("YTThumbnail");
+    const thumbnailImg = document.getElementById("YTImage");
+
+    // guard (hindarin crash)
+    if (!videoLink || !thumbnailDiv || !thumbnailImg) {
+        console.error("HTML element missing");
+        return;
+    }
+
+    try {
+        const { data, error } = await supabaseClient
+            .from("stem_projects")
+            .select("youtube_link")
+            .eq("id",id)
+            .limit(1)
+            .maybeSingle();
+
+        if (error) throw error;
+
+        if (!data?.youtube_link) {
+            console.warn("No YouTube link found");
+            return;
+        }
+
+        const url = data.youtube_link.trim();
+
+        // set tombol
+        videoLink.href = url;
+        videoLink.target = "_blank";
+
+        const videoId = extractYouTubeID(url);
+
+        if (!videoId) {
+            console.warn("Invalid YouTube URL:", url);
+            return;
+        }
+
+        // preload thumbnail
+        const img = new Image();
+        const maxRes = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        const fallback = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+        img.src = maxRes;
+
+        img.onload = () => {
+            thumbnailImg.src = maxRes;
+            thumbnailDiv.style.display = "block";
+        };
+
+        img.onerror = () => {
+            thumbnailImg.src = fallback;
+            thumbnailDiv.style.display = "block";
+        };
+
+        // klik thumbnail
+       thumbnailImg.onclick = () => {
+    openVideoModal(videoId);
+};
+
+videoLink.onclick = (e) => {
+    e.preventDefault();
+    openVideoModal(videoId);
+};
+
+    } catch (err) {
+        console.error("Render video failed:", err);
+    }
+}
+document.addEventListener("DOMContentLoaded", renderVideo);
+
+function openVideoModal(videoId) {
+    if (!videoId) {
+        console.error("Video ID kosong!");
+        return;
+    }
+
+    const frame = document.getElementById("videoFrame");
+    const modalEl = document.getElementById("videoModal");
+
+    const embedURL = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+
+    console.log("EMBED:", embedURL);
+
+    frame.src = embedURL;
+
+    const modal = new bootstrap.Modal(modalEl);
+    modal.show();
+}
+document.addEventListener("DOMContentLoaded", () => {
+    const modalEl = document.getElementById("videoModal");
+    const frame = document.getElementById("videoFrame");
+
+    modalEl.addEventListener("hidden.bs.modal", () => {
+        frame.src = "";
+    });
+});

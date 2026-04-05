@@ -1037,7 +1037,7 @@ $('#createPostModal').on('shown.bs.modal', function () {
 
 });
 
-//Preview image
+//previewimage
 document.addEventListener("DOMContentLoaded", function(){
 
 function initUpload(boxId,inputId,fileNameId,removeId){
@@ -1050,7 +1050,7 @@ const removeBtn = document.getElementById(removeId)
 if(!uploadBox || !fileInput) return
 
 
-// CLICK UPLOAD
+//uplod
 uploadBox.addEventListener("click",(e)=>{
 
 if(e.target === fileInput) return
@@ -1059,7 +1059,7 @@ fileInput.click()
 })
 
 
-// FILE SELECT
+//selectfile
 fileInput.addEventListener("change",(e)=>{
 
 const file = e.target.files[0]
@@ -1070,20 +1070,20 @@ showFile(file)
 })
 
 
-// DRAG OVER
+//dragover
 uploadBox.addEventListener("dragover",(e)=>{
 e.preventDefault()
 uploadBox.classList.add("dragover")
 })
 
 
-// DRAG LEAVE
+//dragleave
 uploadBox.addEventListener("dragleave",()=>{
 uploadBox.classList.remove("dragover")
 })
 
 
-// DROP
+//drop
 uploadBox.addEventListener("drop",(e)=>{
 
 e.preventDefault()
@@ -1099,7 +1099,7 @@ showFile(file)
 })
 
 
-// SHOW FILE NAME
+
 function showFile(file){
 
 fileName.textContent = file.name
@@ -1109,7 +1109,7 @@ removeBtn.classList.remove("d-none")
 }
 
 
-// REMOVE FILE
+
 removeBtn.addEventListener("click",()=>{
 
 fileInput.value = ""
@@ -1123,7 +1123,7 @@ removeBtn.classList.add("d-none")
 }
 
 
-// HEADER FILE
+
 initUpload(
 "uploadBox",
 "postImageHeader",
@@ -1132,7 +1132,6 @@ initUpload(
 )
 
 
-// AUTHOR FILE
 initUpload(
 "uploadAuthorBox",
 "postAuthorImage",

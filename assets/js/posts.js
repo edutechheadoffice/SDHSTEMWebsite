@@ -124,23 +124,23 @@ function filterYear(year) {
   currentPage = 1;
   loadProjects(1);
 }
-  // 🔥 FILTER LEVEL
+  // FILTER LEVEL
   if (filters.level) {
     query = query.eq("school_level", filters.level);
   }
 
-  // 🔥 FILTER GRADE (multi)
+  //FILTER GRADE (multi)
   if (filters.grades.length > 0) {
     query = query.in("school_grade", filters.grades);
   }
-  // 🔥 FILTER SEARCH (title & description)
+  //FILTER SEARCH (title & description)
     if (filters.search) {query = query.or(`title.ilike.%${filters.search}%,description.ilike.%${filters.search}%`);}
     const searchInput = document.getElementById("searchInput");
-// 🔥 FILTER CATEGORY
+// FILTER CATEGORY
 if (filters.category) {
   query = query.eq("category", filters.category);
 }
-//  🔥 FILTER YEAR
+// FILTER YEAR
 if (filters.year) {
   query = query.eq("school_year", filters.year);
 }
@@ -400,3 +400,71 @@ document.addEventListener("DOMContentLoaded", () => {
   loadrelatedpost();
 });
 
+//tags
+async function getTags() {
+  const { data, error } = await supabaseClient
+    .from("stem_projects")
+    .select("tags");
+
+  if (error) {
+    console.error("Supabase error:", error);
+    return [];
+  }
+
+  return data;
+}
+
+function extractUniqueTags(rows) {
+  let allTags = [];
+
+  rows.forEach(row => {
+    let tags = row.tags;
+
+    if (!tags) return;
+
+    if (typeof tags === "string" && tags.startsWith("[")) {
+      try {
+        tags = JSON.parse(tags);
+      } catch {
+        return;
+      }
+    }
+
+    if (typeof tags === "string") {
+      tags = tags.split(",").map(t => t.trim());
+    }
+
+    if (Array.isArray(tags)) {
+      allTags = allTags.concat(tags);
+    }
+  });
+
+  return [...new Set(allTags)];
+}
+
+async function renderTags() {
+  const rows = await getTags();
+  const tags = extractUniqueTags(rows);
+
+  const container = document.querySelector("#tag-list");
+
+  if (!container) {
+    console.error("Tag container not found");
+    return;
+  }
+
+  container.innerHTML = "";
+
+  tags.forEach(tag => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+
+    a.href = "#";
+    a.textContent = tag;
+
+    li.appendChild(a);
+    container.appendChild(li);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", renderTags);

@@ -82,7 +82,7 @@ Quill.register('modules/counter', Counter);
 // ===== Init Quill =====
 window.quill = new Quill('#editor', {
   theme: 'snow',
-  placeholder: 'Write your STEM project posts...',
+  placeholder: 'Write your STEM project posts...(Description, Project Process, Result & Conclusion)',
   modules: {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],

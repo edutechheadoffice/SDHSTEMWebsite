@@ -175,10 +175,7 @@
                     </div>
                 </div> <!-- end row -->
             </div> <!-- end container -->
-            <div class="shape-1"><img src="assets/images/shape/1.svg" alt=""></div>
-            <div class="shape-2"><img src="assets/images/shape/2.svg" alt=""></div>
-            <div class="shape-3"><img src="assets/images/shape/3.svg" alt=""></div>
-            <div class="shape-4"><img src="assets/images/shape/4.svg" alt=""></div>
+           
         </section>
         <!-- end page-title -->
 
@@ -213,7 +210,7 @@
 
                             <div class="tag-share clearfix">
                                 <div class="tag">
-                                    <span>Share: </span>
+                                    <span>Tags: </span>
                                     <ul>
                                         <li><a href="#">Education</a></li>
                                         <li><a href="#">STEM</a></li>
@@ -265,7 +262,7 @@
                             <div class="article-buttons">
     <ul>
         <li>
-            <a class="theme-btn2" href="blog-left-sidebar.html">
+            <a class="theme-btn2" id="PDFLink" href="blog-left-sidebar.html">
                 <i class="fa fa-file-text"></i> Open Research Poster
             </a>
         </li>
@@ -275,25 +272,41 @@
             </a>
         </li>
         <li>
-            <a class="theme-btn2" href="blog-left-sidebar.html">
+            <a class="theme-btn2" id="YTVideo" href="blog-left-sidebar.html">
                 <i class="fa fa-play"></i> Watch Video
             </a>
+             <!-- Thumbnail -->
+    <div id="YTThumbnail" style="margin-top:10px; display:none;">
+        <img id="YTImage" src="" alt="YouTube Thumbnail" style="width:100%; max-width:300px; border-radius:8px; cursor:pointer;">
+    </div>
+</li>
         </li>
         <li>
-            <a class="theme-btn2" href="blog-left-sidebar.html">
+            <a class="theme-btn2" id="MoodleCourse" href="blog-left-sidebar.html">
                 <i class="fa fa-chrome"></i> Open Moodle Course
             </a>
         </li>
+        <br>
+        <li id="EnrolmentKey"><strong>Moodle Key:</strong> </li>
     </ul>
+
 </div>
-                            <div class="widget search-widget">
-                                <form>
-                                    <div>
-                                        <input type="text" class="form-control" placeholder="Search Post..">
-                                        <button type="submit"><i class="ti-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
+          <div class="widget search-widget" style="position: relative;">
+  <form onsubmit="return false;">
+    <div>
+      <input 
+        type="text" 
+        id="search-input"
+        class="form-control" 
+        placeholder="Search Post.."
+        autocomplete="off"
+      >
+      <button type="submit"><i class="ti-search"></i></button>
+    </div>
+  </form>
+
+  <div id="search-results" class="search-dropdown"></div>
+</div>
                            <div class="widget category-widget">
   <h3>Categories</h3>
   <ul id="categoryList"></ul>
@@ -334,15 +347,8 @@
                           
                             <div class="widget tag-widget">
                                 <h3>Tags</h3>
-                                <ul>
-                                    <li><a href="#">Education</a></li>
-                                    <li><a href="#">Marketing</a></li>
-                                    <li><a href="#">Video</a></li>
-                                    <li><a href="#">Knowledge</a></li>
-                                    <li><a href="#">Design</a></li>
-                                    <li><a href="#">SOCIAL</a></li>
-                                    <li><a href="#">SECURITY</a></li>
-                                    <li><a href="#">Web Design</a></li>
+                                <ul id ="tag-list">
+                                
                                 </ul>
                             </div>
                         </div>
@@ -373,7 +379,6 @@
         </section>
         <!-- end subscribe-section -->
 
-        
         <!-- start of wpo-site-footer-section -->
         <footer class="wpo-site-footer">
             <div class="wpo-lower-footer">
@@ -389,7 +394,6 @@
                 </div>
         </footer>
         <!-- end of wpo-site-footer-section -->
-
     </div>
     <!-- end of page-wrapper -->
 <div class="modal fade" id="createPostModal" tabindex="-1">
@@ -481,7 +485,6 @@
   <label class="form-label">Tags</label>
   <div class="input-group">
     
-
     <select class="form-select" id="postTags" multiple>
       <option value="Education">Education</option>
       <option value="Design">Design</option>
@@ -588,9 +591,8 @@ class="btn btn-sm btn-danger mt-2 d-none">
 Remove Image
 </button>
 </div>
-
               <div class="col-md-6">
-                <label class="form-label">YouTube Link</label>
+                <label class="form-label">YouTube Link (Not Private)</label>
                 <div class="input-group">
                   <span class="input-group-text"><i class="bi bi-youtube"></i></span>
                   <input type="text" class="form-control" id="postVideo">
@@ -604,7 +606,6 @@ Remove Image
                   <input type="text" class="form-control" id="postMoodle">
                 </div>
               </div>
-
               <div class="col-md-6">
                 <label class="form-label">Research Poster PDF</label>
                 <div class="input-group">
@@ -612,12 +613,11 @@ Remove Image
                   <input type="file" class="form-control" id="postResearch" accept="application/pdf">
                 </div>
               </div>
-
               <div class="col-md-6">
-                <label class="form-label">Additional Image</label>
+                <label class="form-label">Moodle Key</label>
                 <div class="input-group">
-                  <span class="input-group-text"><i class="bi bi-plus-square"></i></span>
-                  <input type="text" class="form-control" id="postImage1">
+                  <span class="input-group-text"><i class="fa fa-key"></i></span>
+                  <input type="text" class="form-control" id="keyMoodle">
                 </div>
               </div>
 
@@ -656,6 +656,24 @@ Remove Image
       <div class="toast-progress-bar" id="toastProgress"></div>
     </div>
 
+  </div>
+</div>
+
+<div class="modal fade" id="videoModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark">
+
+      <div class="modal-body p-0">
+        <iframe id="videoFrame"
+          width="100%"
+          height="400"
+          frameborder="0"
+          allow="autoplay; encrypted-media"
+          allowfullscreen>
+        </iframe>
+      </div>
+
+    </div>
   </div>
 </div>
 

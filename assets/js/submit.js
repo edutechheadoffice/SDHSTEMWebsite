@@ -80,7 +80,7 @@ author_image: authorUrl,
 youtube_link: $("#postVideo").val(),
 moodle_link: $("#postMoodle").val(),
 research_pdf: $("#postResearch").val(),
-additional_image: $("#postImage1").val()
+moodle_key: $("#keyMoodle").val()
 }
 
 const { data, error } = await supabaseClient
