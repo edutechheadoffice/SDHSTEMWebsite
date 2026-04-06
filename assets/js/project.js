@@ -156,7 +156,7 @@ renderGallery(data.gallery_images);
 
 
 // EnrolmentKey
-document.getElementById("EnrolmentKey").innerHTML = `<strong> Moodle Key:</strong> ${data.moodle_key}`;
+document.getElementById("EnrolmentKey").innerHTML = `<i class="fa fa-key"></i><strong> Moodle Key:</strong> ${data.moodle_key}`;
 
 // Facebooklink
 document.getElementById("shareFacebook").href =
@@ -604,7 +604,7 @@ function prevImage() {
 }
 document.addEventListener("DOMContentLoaded", () => {
 
-  document.getElementById("openGallery").onclick = (e) => {
+  document.getElementById("GalleryModal").onclick = (e) => {
     e.preventDefault();
     console.log("CLICKED");
     openLightbox(0);
