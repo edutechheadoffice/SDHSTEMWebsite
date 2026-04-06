@@ -809,7 +809,24 @@ Remove Image
                   <input type="text" class="form-control" id="keyMoodle">
                 </div>
               </div>
+<div class="col-12">
+  <label class="form-label">Gallery Images (Max 5)</label>
 
+  <div class="upload-box multi" id="galleryUploadBox">
+    <i class="bi bi-images fs-2"></i>
+    <p class="mb-1">Drag & Drop Images</p>
+    <small class="text-muted">or click to upload (max 5)</small>
+
+    <input 
+      type="file" 
+      id="postGallery" 
+      accept="image/*"
+      multiple
+      hidden>
+  </div>
+
+  <div id="galleryPreview" class="d-flex flex-wrap gap-3 mt-3"></div>
+</div>
             </div>
           </div>
 

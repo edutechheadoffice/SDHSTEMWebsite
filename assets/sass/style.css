@@ -16323,3 +16323,51 @@ background:#f0fff5;
     padding: 10px 15px;
 }
 
+.upload-box.multi {
+  border: 2px dashed #ced4da;
+  border-radius: 16px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  background: #f8f9fa;
+}
+
+.upload-box.multi:hover {
+  border-color: #0d6efd;
+  background: #eef4ff;
+}
+
+.upload-box.dragover {
+  border-color: #198754;
+  background: #e9f7ef;
+}
+
+.preview-item {
+  position: relative;
+  width: 110px;
+  height: 110px;
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.remove-btn {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}

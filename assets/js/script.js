@@ -1140,3 +1140,74 @@ initUpload(
 )
 
 })
+
+const uploadBox = document.getElementById("galleryUploadBox");
+const fileInput = document.getElementById("postGallery");
+const preview = document.getElementById("galleryPreview");
+
+let selectedFiles = [];
+
+// klik
+uploadBox.addEventListener("click", () => fileInput.click());
+
+// drag over
+uploadBox.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  uploadBox.classList.add("dragover");
+});
+
+// drag leave
+uploadBox.addEventListener("dragleave", () => {
+  uploadBox.classList.remove("dragover");
+});
+
+// drop
+uploadBox.addEventListener("drop", (e) => {
+  e.preventDefault();
+  uploadBox.classList.remove("dragover");
+
+  handleFiles(e.dataTransfer.files);
+});
+
+// input change
+fileInput.addEventListener("change", (e) => {
+  handleFiles(e.target.files);
+});
+
+// handle files
+function handleFiles(files) {
+  const newFiles = Array.from(files);
+
+  if (selectedFiles.length + newFiles.length > 5) {
+    showToast("Max 5 images!", "danger");
+    return;
+  }
+
+  newFiles.forEach(file => {
+    if (!file.type.startsWith("image/")) return;
+
+    selectedFiles.push(file);
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const div = document.createElement("div");
+      div.classList.add("preview-item");
+
+      div.innerHTML = `
+        <img src="${e.target.result}">
+        <div class="remove-btn">&times;</div>
+      `;
+
+      // remove image
+      div.querySelector(".remove-btn").onclick = () => {
+        const index = selectedFiles.indexOf(file);
+        if (index > -1) selectedFiles.splice(index, 1);
+        div.remove();
+      };
+
+      preview.appendChild(div);
+    };
+
+    reader.readAsDataURL(file);
+  });
+}

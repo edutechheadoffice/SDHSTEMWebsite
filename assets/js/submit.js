@@ -1,111 +1,87 @@
-async function uploadImages(headerFile, authorFile){
+async function uploadFile(file, folder) {
+  if (!file) return "";
 
-const headerReader = new FileReader()
-const authorReader = new FileReader()
+  const filePath = `${folder}/${Date.now()}_${file.name}`;
 
-return new Promise((resolve)=>{
+  const { error } = await supabaseClient.storage
+    .from("stem-images")
+    .upload(filePath, file);
 
-headerReader.onload = async function(){
+  if (error) throw error;
 
-authorReader.onload = async function(){
+  const { data } = supabaseClient.storage
+    .from("stem-images")
+    .getPublicUrl(filePath);
 
-const res = await fetch("https://defaultc1ec01f235254499b71b3f746dd99f.8d.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/25e092709a8d43c5bb33e2a5887340c7/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=d7AACVyjHPgMluU3XBfTEWi_103t8J50SFM5tprS2T4",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({
-headerFileName: headerFile.name,
-headerFileContent: headerReader.result.split(",")[1],
-authorFileName: authorFile.name,
-authorFileContent: authorReader.result.split(",")[1]
-})
-})
-
-const data = await res.json()
-
-resolve(data)
-
+  return data.publicUrl;
 }
-
-authorReader.readAsDataURL(authorFile)
-
-}
-
-headerReader.readAsDataURL(headerFile)
-
-})
-
-}
-
 
 
 $("#createPostForm").on("submit", async function (e) {
+  e.preventDefault();
 
-e.preventDefault()
+  showToast("Uploading...", "loading");
 
-showToast("Uploading...","loading")
+  const headerFile = document.getElementById("postImageHeader").files[0];
+  const authorFile = document.getElementById("postAuthorImage").files[0];
+  const pdfFile = document.getElementById("postResearch").files[0];
 
-const headerFile = document.getElementById("postImageHeader").files[0]
-const authorFile = document.getElementById("postAuthorImage").files[0]
+  let headerUrl = "";
+  let authorUrl = "";
+  let pdfUrl = "";
 
-let headerUrl=""
-let authorUrl=""
+  try {
+    // paralel upload
+    const [h, a, p] = await Promise.all([
+      uploadFile(headerFile, "headers"),
+      uploadFile(authorFile, "authors"),
+      uploadFile(pdfFile, "pdfs")
+    ]);
 
-try{
+    headerUrl = h;
+    authorUrl = a;
+    pdfUrl = p;
 
-if(headerFile || authorFile){
+    showToast("Saving project...", "loading");
 
-const result = await uploadImages(headerFile,authorFile)
+    const projectData = {
+      title: $("#postTitle").val(),
+      author: $("#postAuthor").val(),
+      school: $("#postSchool").val(),
+      school_year: $("#postSchoolYear").val(),
+      category: $("#postCategory").val(),
+      tags: $("#postTags").val(),
+      school_level: $("#postSchoolLevel").val(),
+      school_grade: $("#postSchoolGrade").val(),
+      description: window.quill.root.innerHTML,
+      image_header: headerUrl,
+      author_image: authorUrl,
+      research_pdf: pdfUrl,
+      youtube_link: $("#postVideo").val(),
+      moodle_link: $("#postMoodle").val(),
+      moodle_key: $("#keyMoodle").val()
+    };
 
-headerUrl = result.headerUrl
-authorUrl = result.authorUrl
+    const { data, error } = await supabaseClient
+      .from("stem_projects")
+      .insert([projectData])
+      .select();
 
-}
+    if (error) {
+      showToast("Project failed: " + error.message, "danger");
+      return;
+    }
 
-showToast("Saving project...","loading")
+    const newId = data[0].id;
 
-const projectData = {
-title: $("#postTitle").val(),
-author: $("#postAuthor").val(),
-school: $("#postSchool").val(),
-school_year: $("#postSchoolYear").val(),
-category: $("#postCategory").val(),
-tags: $("#postTags").val(),
-school_level: $("#postSchoolLevel").val(),
-school_grade: $("#postSchoolGrade").val(),
-description: window.quill.root.innerHTML,
-image_header: headerUrl,
-author_image: authorUrl,
-youtube_link: $("#postVideo").val(),
-moodle_link: $("#postMoodle").val(),
-research_pdf: $("#postResearch").val(),
-moodle_key: $("#keyMoodle").val()
-}
+    showToast("Project published successfully!", "success");
 
-const { data, error } = await supabaseClient
-.from("stem_projects")
-.insert([projectData])
-.select()
+    setTimeout(() => {
+      window.location.href = `project.html?id=${newId}`;
+    }, 2000);
 
-if(error){
-showToast("Project failed to publish: "+error.message,"danger")
-return
-}
-
-const newId = data[0].id
-
-showToast("Project published successfully!","success")
-
-setTimeout(()=>{
-window.location.href = `project.html?id=${newId}`
-},2000)
-
-}catch(err){
-
-console.error(err)
-showToast("Upload failed. Please try again.","danger")
-
-}
-
-})
+  } catch (err) {
+    console.error(err);
+    showToast("Upload failed. Please try again.", "danger");
+  }
+});
