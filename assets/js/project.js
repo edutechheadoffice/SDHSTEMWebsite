@@ -575,14 +575,14 @@ document.addEventListener("DOMContentLoaded", () => {
 let galleryImages = [];
 let currentIndex = 0;
 function openLightbox(index = 0) {
-   console.log("Gallery:", galleryImages); // 🔥 cek ini
-  console.log("Index:", index);
+  if (!galleryImages || galleryImages.length === 0) return;
+
   currentIndex = index;
-
-  document.getElementById("lightboxModal").classList.remove("d-none");
   showImage();
-}
 
+  const modal = new bootstrap.Modal(document.getElementById("galleryModal"));
+  modal.show();
+}
 function closeLightbox() {
   document.getElementById("lightboxModal").classList.add("d-none");
 }

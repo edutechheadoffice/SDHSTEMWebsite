@@ -714,15 +714,31 @@ Remove Image
   </div>
 </div>
 
-<div id="lightboxModal" class="lightbox d-none">
+<div class="modal fade" id="galleryModal" tabindex="-1">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content bg-dark border-0">
 
-  <span class="close-btn" id="closeLightbox">&times;</span>
+      <div class="modal-body d-flex align-items-center justify-content-center position-relative">
 
-  <img id="lightboxImage" src="">
+        <!-- close -->
+        <button class="btn-close btn-close-white position-absolute top-0 end-0 m-3"
+                data-bs-dismiss="modal"></button>
 
- <button class="lightbox-nav lightbox-prev" id="prevImage">&#10094;</button>
-<button class="lightbox-nav lightbox-next" id="nextImage">&#10095;</button>
+        <!-- image -->
+        <img id="lightboxImage"
+             class="img-fluid rounded"
+             style="max-height:90vh;">
 
+        <!-- prev -->
+        <button class="lightbox-nav lightbox-prev" id="prevImage">&#10094;</button>
+
+        <!-- next -->
+        <button class="lightbox-nav lightbox-next" id="nextImage">&#10095;</button>
+
+      </div>
+
+    </div>
+  </div>
 </div>
 
 
