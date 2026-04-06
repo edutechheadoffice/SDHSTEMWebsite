@@ -59,7 +59,7 @@ async function loadProject() {
   // Title browser
   document.title = data.title + " | SDH STEM Gallery";
 
-  // Update header]
+  // Update header
   document.getElementById("pageSchoolTitle").innerText =
   `STEM Projects in ${data.school}`;
 
@@ -124,6 +124,36 @@ document.getElementById("PDFLink").href = data.research_pdf;
 document.getElementById("YTVideo").href = data.youtube_link;
 //Moodle
 document.getElementById("MoodleCourse").href = data.moodle_link;
+
+//simpan data dari render
+function renderGallery(images) {
+  if (!images || images.length === 0) return;
+
+  if (typeof images === "string") {
+    images = JSON.parse(images);
+  }
+
+  galleryImages = images; //
+
+  const section = document.getElementById("gallerySection");
+  const container = document.getElementById("carouselInner");
+
+  section.classList.remove("d-none");
+
+  container.innerHTML = images.map((img, i) => `
+    <div class="carousel-item ${i === 0 ? "active" : ""}">
+      <div class="ratio-16x9">
+        <img src="${img}" class="w-100 h-100"
+             style="object-fit:cover; cursor:pointer"
+             onclick="openLightbox(${i})">
+      </div>
+    </div>
+  `).join("");
+}
+renderGallery(data.gallery_images);
+
+
+
 
 // EnrolmentKey
 document.getElementById("EnrolmentKey").innerHTML = `<strong> Moodle Key:</strong> ${data.moodle_key}`;
@@ -531,7 +561,8 @@ function openVideoModal(videoId) {
 
     const modal = new bootstrap.Modal(modalEl);
     modal.show();
-}
+};
+
 document.addEventListener("DOMContentLoaded", () => {
     const modalEl = document.getElementById("videoModal");
     const frame = document.getElementById("videoFrame");
@@ -540,3 +571,50 @@ document.addEventListener("DOMContentLoaded", () => {
         frame.src = "";
     });
 });
+
+let galleryImages = [];
+let currentIndex = 0;
+function openLightbox(index = 0) {
+   console.log("Gallery:", galleryImages); // 🔥 cek ini
+  console.log("Index:", index);
+  currentIndex = index;
+
+  document.getElementById("lightboxModal").classList.remove("d-none");
+  showImage();
+}
+
+function closeLightbox() {
+  document.getElementById("lightboxModal").classList.add("d-none");
+}
+
+function showImage() {
+    console.log("Show image:", galleryImages[currentIndex]);
+
+  document.getElementById("lightboxImage").src = galleryImages[currentIndex];
+}
+
+function nextImage() {
+  currentIndex = (currentIndex + 1) % galleryImages.length;
+  showImage();
+}
+
+function prevImage() {
+  currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+  showImage();
+}
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.getElementById("openGallery").onclick = (e) => {
+    e.preventDefault();
+    console.log("CLICKED");
+    openLightbox(0);
+  };
+
+  document.getElementById("closeLightbox").onclick = closeLightbox;
+  document.getElementById("nextImage").onclick = nextImage;
+  document.getElementById("prevImage").onclick = prevImage;
+
+});
+console.log(
+  document.getElementById("lightboxModal").getBoundingClientRect()
+);

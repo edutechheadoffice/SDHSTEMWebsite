@@ -16,6 +16,15 @@ async function uploadFile(file, folder) {
   return data.publicUrl;
 }
 
+async function uploadMultipleFiles(files, folder) {
+  if (!files || files.length === 0) return [];
+
+  const uploadPromises = Array.from(files).map(file => 
+    uploadFile(file, folder)
+  );
+
+  return await Promise.all(uploadPromises);
+}
 
 $("#createPostForm").on("submit", async function (e) {
   e.preventDefault();
@@ -25,17 +34,18 @@ $("#createPostForm").on("submit", async function (e) {
   const headerFile = document.getElementById("postImageHeader").files[0];
   const authorFile = document.getElementById("postAuthorImage").files[0];
   const pdfFile = document.getElementById("postResearch").files[0];
-
+  const galleryFiles = selectedFiles;
   let headerUrl = "";
   let authorUrl = "";
   let pdfUrl = "";
 
   try {
     // paralel upload
-    const [h, a, p] = await Promise.all([
+    const [h, a, p, gallery] = await Promise.all([
       uploadFile(headerFile, "headers"),
       uploadFile(authorFile, "authors"),
-      uploadFile(pdfFile, "pdfs")
+      uploadFile(pdfFile, "pdfs"),
+      uploadMultipleFiles(galleryFiles, "gallery")
     ]);
 
     headerUrl = h;
@@ -59,7 +69,8 @@ $("#createPostForm").on("submit", async function (e) {
       research_pdf: pdfUrl,
       youtube_link: $("#postVideo").val(),
       moodle_link: $("#postMoodle").val(),
-      moodle_key: $("#keyMoodle").val()
+      moodle_key: $("#keyMoodle").val(),
+      gallery_images: gallery
     };
 
     const { data, error } = await supabaseClient

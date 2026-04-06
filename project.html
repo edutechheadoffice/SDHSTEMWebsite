@@ -260,15 +260,34 @@
                                 
                             </div>
                             <div class="article-buttons">
+           <div id="gallerySection" class="mt-4 d-none">
+
+  <h5 class="mb-3"><i class="fa fa-file-image-o"></i>  Project Gallery</h5>
+
+  <div id="galleryCarousel" class="carousel slide" data-bs-ride="carousel">
+    
+    <div class="carousel-inner" id="carouselInner"></div>
+
+    <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+
+    <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
+
+  </div>
+
+</div>                    
     <ul>
         <li>
-            <a class="theme-btn2" id="PDFLink" href="blog-left-sidebar.html">
-                <i class="fa fa-file-text"></i> Open Research Poster
+            <a class="theme-btn2" href="#" id="openGallery">
+                <i class="fa fa fa-picture-o"></i> View Full Image
             </a>
         </li>
-        <li>
-            <a class="theme-btn2" href="blog-left-sidebar.html">
-                <i class="fa fa-image"></i> View Gallery
+       <li>
+            <a class="theme-btn2" id="PDFLink" href="blog-left-sidebar.html">
+                <i class="fa fa-file-text"></i> Open Research Poster
             </a>
         </li>
         <li>
@@ -280,14 +299,14 @@
         <img id="YTImage" src="" alt="YouTube Thumbnail" style="width:100%; max-width:300px; border-radius:8px; cursor:pointer;">
     </div>
 </li>
-        </li>
+      
         <li>
             <a class="theme-btn2" id="MoodleCourse" href="blog-left-sidebar.html">
                 <i class="fa fa-chrome"></i> Open Moodle Course
             </a>
         </li>
         <br>
-        <li id="EnrolmentKey"><strong>Moodle Key:</strong> </li>
+        <li id="EnrolmentKey"><strong><i class="fa fa-key"></i>Moodle Key:</strong> </li>
     </ul>
 
 </div>
@@ -675,6 +694,16 @@ Remove Image
 
   </div>
 </div>
+<div id="lightboxModal" class="lightbox d-none">
+
+  <span class="close-btn" id="closeLightbox">&times;</span>
+
+  <img id="lightboxImage" src="">
+
+  <button class="nav prev" id="prevImage">&#10094;</button>
+  <button class="nav next" id="nextImage">&#10095;</button>
+
+</div>
 
 <div class="modal fade" id="videoModal" tabindex="-1">
   <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -693,6 +722,8 @@ Remove Image
     </div>
   </div>
 </div>
+
+
 
      <!-- All JavaScript files
     ================================================== -->

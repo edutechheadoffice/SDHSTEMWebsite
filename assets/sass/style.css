@@ -16371,3 +16371,39 @@ background:#f0fff5;
   justify-content: center;
   cursor: pointer;
 }
+.ratio-16x9 {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 12px;
+}
+.lightbox {
+ position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 85%;
+  border-radius: 10px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 35px;
+  color: white;
+  cursor: pointer;
+}
+
+.prev { left: 30px; }
+.next { right: 30px; }
