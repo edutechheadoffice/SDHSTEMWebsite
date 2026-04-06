@@ -574,22 +574,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
 let galleryImages = [];
 let currentIndex = 0;
+
 function openLightbox(index = 0) {
-  if (!galleryImages || galleryImages.length === 0) return;
+  if (!galleryImages || galleryImages.length === 0) {
+    console.warn("Gallery kosong!");
+    return;
+  }
 
   currentIndex = index;
-  showImage();
+
+  const img = document.getElementById("lightboxImage");
+  img.src = galleryImages[currentIndex];
 
   const modal = new bootstrap.Modal(document.getElementById("galleryModal"));
   modal.show();
 }
-function closeLightbox() {
-  document.getElementById("lightboxModal").classList.add("d-none");
-}
 
 function showImage() {
-    console.log("Show image:", galleryImages[currentIndex]);
-
   document.getElementById("lightboxImage").src = galleryImages[currentIndex];
 }
 
@@ -602,19 +603,20 @@ function prevImage() {
   currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
   showImage();
 }
-document.addEventListener("DOMContentLoaded", () => {
 
-  document.getElementById("GalleryModal").onclick = (e) => {
+document.addEventListener("click", function(e) {
+
+  if (e.target.closest("#openGallery")) {
     e.preventDefault();
-    console.log("CLICKED");
     openLightbox(0);
-  };
+  }
 
-  document.getElementById("closeLightbox").onclick = closeLightbox;
-  document.getElementById("nextImage").onclick = nextImage;
-  document.getElementById("prevImage").onclick = prevImage;
+  if (e.target.closest("#nextImage")) {
+    nextImage();
+  }
+
+  if (e.target.closest("#prevImage")) {
+    prevImage();
+  }
 
 });
-console.log(
-  document.getElementById("lightboxModal").getBoundingClientRect()
-);

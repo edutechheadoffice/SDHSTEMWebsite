@@ -15918,20 +15918,54 @@ img {
   color: white;
   cursor: pointer;
 }
+/* wrapper tombol */
 .lightbox-nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 40px;
-  background: none;
-  border: none;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255,255,255,0.2);
   color: white;
+  font-size: 24px;
+
   cursor: pointer;
-  z-index: 100000;
+  transition: all 0.3s ease;
+  z-index: 10;
 }
 
-.lightbox-nav.prev { left: 30px; }
-.lightbox-nav.next { right: 30px; }
+/* posisi */
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+/* hover effect */
+.lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* klik effect */
+.lightbox-nav:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+/* mobile adjust */
+@media (max-width: 768px) {
+  .lightbox-nav {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+}
 
 .wpo-terms-section .accordion-item .accordion-body {
   padding-left: 0;
