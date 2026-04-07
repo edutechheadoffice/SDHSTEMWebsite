@@ -64,7 +64,7 @@ async function loadProject() {
   `STEM Projects in ${data.school}`;
 
 document.getElementById("pageSchoolSubtitle").innerHTML =
-  `Explore how each ${data.school} brings STEM learning to life. <br> Click to see their projects and innovations`;
+  `Explore how ${data.school} brings STEM learning to life. <br> Click to see their projects and innovations`;
 
 
 //Categories count sidebar

@@ -1178,7 +1178,7 @@ fileInput.addEventListener("change", (e) => {
 function handleFiles(files) {
   const newFiles = Array.from(files);
 
-  if (selectedFiles.length + newFiles.length > 5) {
+  if (selectedFiles.length + newFiles.length > 10) {
     showToast("Max 5 images!", "danger");
     return;
   }
