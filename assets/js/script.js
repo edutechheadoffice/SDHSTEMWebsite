@@ -1179,7 +1179,7 @@ function handleFiles(files) {
   const newFiles = Array.from(files);
 
   if (selectedFiles.length + newFiles.length > 10) {
-    showToast("Max 5 images!", "danger");
+    showToast("Max 10 images!", "danger");
     return;
   }
 
