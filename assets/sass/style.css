@@ -16456,3 +16456,12 @@ background:#f0fff5;
   overflow: hidden;
   border-radius: 12px;
 }
+
+#pdfCanvas {
+  transition: transform 0.3s ease;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+#pdfCanvas:hover {
+  transform: scale(1.03);
+}

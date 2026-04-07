@@ -120,6 +120,11 @@ const pageImage = encodeURIComponent(data.image_header);
 
 // Researchposter
 document.getElementById("PDFLink").href = data.research_pdf;
+if (data.research_pdf) {
+  document.getElementById("PDFLink").href = data.research_pdf;
+
+  renderPDFThumbnail(data.research_pdf);
+}
 // WatchVideo
 document.getElementById("YTVideo").href = data.youtube_link;
 //Moodle
@@ -620,3 +625,32 @@ document.addEventListener("click", function(e) {
   }
 
 });
+
+async function renderPDFThumbnail(pdfUrl) {
+  if (!pdfUrl) return;
+
+  const container = document.getElementById("PDFThumbnail");
+  const canvas = document.getElementById("pdfCanvas");
+
+  container.style.display = "block";
+
+  try {
+    const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
+    const page = await pdf.getPage(1);
+
+    const viewport = page.getViewport({ scale: 1 });
+    const context = canvas.getContext("2d");
+
+    canvas.height = viewport.height;
+    canvas.width = viewport.width;
+
+    await page.render({
+      canvasContext: context,
+      viewport: viewport
+    }).promise;
+
+  } catch (err) {
+    console.error("PDF preview error:", err);
+  }
+};
+
